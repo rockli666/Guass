@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x9ad8;&#x65af;&#x6b63;&#x53cd;&#x7b97;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="高斯正反算">高斯正反算</h1>
+<ul>
+<li>
+<p><strong>编程实现(c#)</strong></p>
+</li>
+<li>
+<p><strong>难点分析</strong></p>
+<ol>
+<li>公式容易抄错</li>
+<li>不理解公式中字母代表的含义</li>
+<li>角度表示方式</li>
+<li>除以 例如：1/2=0而1/2.0=0.5</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>不需要知道公式是怎么来的，照着公式就开干</p>
+</blockquote>
+<hr>
+<h2 id="正算">正算</h2>
+<ul>
+<li>
+<p>主要公式</p>
+<p><img src="file:///c:\Users\LENOVO\Desktop\大地测量\%E6%AD%A3%E7%AE%97%E5%85%AC%E5%BC%8F.jpg" alt=""></p>
+</li>
+<li>
+<p>公式解析</p>
+<blockquote>
+<p>X为<strong>子午线弧长</strong>、N为<strong>卯酉圈半径</strong>、t为<strong>B的正切</strong>、eta为<strong>第二离心率×【COS(B)的平方】</strong></p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="language-csharp">  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> 高斯正算</span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;Pbl&quot;&gt;</span>点<span class="hljs-doctag">&lt;/param&gt;</span></span>
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">BL2xy</span>(<span class="hljs-params"><span class="hljs-built_in">double</span> B, <span class="hljs-built_in">double</span> L, <span class="hljs-keyword">out</span> <span class="hljs-built_in">double</span> x, <span class="hljs-keyword">out</span> <span class="hljs-built_in">double</span> y</span>)</span>
+  {
+      <span class="hljs-built_in">double</span> l = L - L0;
+      <span class="hljs-built_in">double</span> N = ell.N(B);
+
+      <span class="hljs-built_in">double</span> eta2 = ell.e_2 * Math.Cos(B) * Math.Cos(B);
+      <span class="hljs-built_in">double</span> eta4 = Math.Pow(eta2, <span class="hljs-number">2</span>);
+
+      <span class="hljs-built_in">double</span> t = Math.Tan(B);
+      <span class="hljs-built_in">double</span> t2 = t * t;
+      <span class="hljs-built_in">double</span> t4 = Math.Pow(t, <span class="hljs-number">4</span>);
+
+      <span class="hljs-built_in">double</span> X = Arclength(B);  <span class="hljs-comment">//子午线弧长</span>
+
+      <span class="hljs-built_in">double</span> m = l * Math.Cos(B);
+      <span class="hljs-built_in">double</span> m2 = m * m;
+      <span class="hljs-built_in">double</span> m3 = m2 * m;
+      <span class="hljs-built_in">double</span> m4 = m3 * m;
+      <span class="hljs-built_in">double</span> m5 = m4 * m;
+      <span class="hljs-built_in">double</span> m6 = m5 * m;
+
+      x = X + N * t * (<span class="hljs-number">0.5</span> * m2 + <span class="hljs-number">1</span> / <span class="hljs-number">24.0</span> * (<span class="hljs-number">5</span> - t2 + <span class="hljs-number">9</span> * eta2 + <span class="hljs-number">4</span> * eta4) * m4
+          + <span class="hljs-number">1</span> / <span class="hljs-number">720.0</span> * (<span class="hljs-number">61</span> - <span class="hljs-number">58</span> * t2 + t4) * m6);
+      y = N * (m + <span class="hljs-number">1</span> / <span class="hljs-number">6.0</span> * (<span class="hljs-number">1</span> - t2 + eta2) * m3 +
+          <span class="hljs-number">1</span> / <span class="hljs-number">120.0</span> * (<span class="hljs-number">5</span> - <span class="hljs-number">18</span> * t2 + t4 + <span class="hljs-number">14</span> * eta2 - <span class="hljs-number">58</span> * eta2 * t2) * m5);
+
+      y = y + Y0;
+  }
+</code></pre>
+<hr>
+<h2 id="子午线弧长的计算">子午线弧长的计算</h2>
+<p><img src="file:///c:\Users\LENOVO\Desktop\大地测量\%E5%AD%90%E5%8D%88%E7%BA%BF%E5%BC%A7%E9%95%BF%E8%AE%A1%E7%AE%97.png" alt=""></p>
+<ul>
+<li><strong>m是什么？</strong></li>
+</ul>
+<p><img src="file:///c:\Users\LENOVO\Desktop\大地测量\m.jpg" alt=""></p>
+<pre><code class="language-csharp">  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> 计算从赤道到投影点的子午线弧长</span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;lat&quot;&gt;</span> 纬度 （以度为单位） <span class="hljs-doctag">&lt;/param&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;returns&gt;</span><span class="hljs-doctag">&lt;/returns&gt;</span></span>
+  <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-built_in">double</span> <span class="hljs-title">Arclength</span>(<span class="hljs-params"><span class="hljs-built_in">double</span> lat</span>)</span>
+  {
+      <span class="hljs-built_in">double</span> B = lat;
+      <span class="hljs-built_in">double</span> X;
+      <span class="hljs-built_in">double</span> a = ell.a;
+      <span class="hljs-built_in">double</span> e2 = ell.e2;
+
+      <span class="hljs-built_in">double</span> m0 = a * (<span class="hljs-number">1</span> - e2);
+      <span class="hljs-built_in">double</span> m2 = <span class="hljs-number">3</span> / <span class="hljs-number">2.0</span> * e2 * m0;
+      <span class="hljs-built_in">double</span> m4 = <span class="hljs-number">5</span> / <span class="hljs-number">4.0</span> * e2 * m2;
+      <span class="hljs-built_in">double</span> m6 = <span class="hljs-number">7</span> / <span class="hljs-number">6.0</span> * e2 * m4;
+      <span class="hljs-built_in">double</span> m8 = <span class="hljs-number">9</span> / <span class="hljs-number">8.0</span> * e2 * m6;
+
+      <span class="hljs-built_in">double</span> a0 = m0 + m2 / <span class="hljs-number">2</span> + <span class="hljs-number">3</span> / <span class="hljs-number">8.0</span> * m4 + <span class="hljs-number">5</span> / <span class="hljs-number">16.0</span> * m6 + <span class="hljs-number">35</span> / <span class="hljs-number">128.0</span> * m8;
+      <span class="hljs-built_in">double</span> a2 = m2 / <span class="hljs-number">2</span> + m4 / <span class="hljs-number">2</span> + <span class="hljs-number">15</span> / <span class="hljs-number">32.0</span> * m6 + <span class="hljs-number">7</span> / <span class="hljs-number">16.0</span> * m8;
+      <span class="hljs-built_in">double</span> a4 = m4 / <span class="hljs-number">8</span> + <span class="hljs-number">3</span> / <span class="hljs-number">16.0</span> * m6 + <span class="hljs-number">7</span> / <span class="hljs-number">32.0</span> * m8;
+      <span class="hljs-built_in">double</span> a6 = m6 / <span class="hljs-number">32</span> + m8 / <span class="hljs-number">16</span>;
+      <span class="hljs-built_in">double</span> a8 = m8 / <span class="hljs-number">128</span>;
+
+      <span class="hljs-built_in">double</span> sinB = Math.Sin(B);
+      <span class="hljs-built_in">double</span> sin2B = Math.Sin(B * <span class="hljs-number">2</span>);
+      <span class="hljs-built_in">double</span> sin4B = Math.Sin(B * <span class="hljs-number">4</span>);
+      <span class="hljs-built_in">double</span> sin6B = Math.Sin(B * <span class="hljs-number">6</span>);
+      <span class="hljs-built_in">double</span> sin8B = Math.Sin(B * <span class="hljs-number">8</span>);
+      <span class="hljs-built_in">double</span> cosB = Math.Cos(B);
+
+      X = a0 * B - a2/<span class="hljs-number">2</span>*sin2B+a4/<span class="hljs-number">4</span>*sin4B-a6/<span class="hljs-number">6</span>*sin6B+a8/<span class="hljs-number">8</span>+sin8B;
+      <span class="hljs-keyword">return</span> X;
+  }
+</code></pre>
+<hr>
+<h2 id="反算">反算</h2>
+<ul>
+<li>
+<p>主要公式</p>
+<p><img src="file:///c:\Users\LENOVO\Desktop\大地测量\%E5%8F%8D%E7%AE%97%E5%85%AC%E5%BC%8F.jpg" alt=""></p>
+</li>
+<li>
+<p>公式解析</p>
+</li>
+</ul>
+<blockquote>
+<p>Bf为<strong>底点纬度</strong>、Vf为<strong>底点纬度对应的第二辅助函数</strong>、t为<strong>B的正切</strong>、eta为<strong>第二离心率×【COS(B)的平方】</strong></p>
+</blockquote>
+<blockquote>
+<p>注：y记得减500km
+需不需要除以pi*180</p>
+</blockquote>
+<pre><code class="language-csharp">  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> 计算高斯投影反算</span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;Pxy&quot;&gt;</span>点<span class="hljs-doctag">&lt;/param&gt;</span></span>
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">xy2BL</span>(<span class="hljs-params"><span class="hljs-built_in">double</span> x, <span class="hljs-built_in">double</span> y, <span class="hljs-keyword">out</span> <span class="hljs-built_in">double</span> B, <span class="hljs-keyword">out</span> <span class="hljs-built_in">double</span> L</span>)</span>
+  {   
+      <span class="hljs-built_in">double</span> B_f = EndPointLat(x);    <span class="hljs-comment">//底点维度</span>
+      <span class="hljs-built_in">double</span> slat = Math.Sin(B_f);
+      <span class="hljs-built_in">double</span> clat = Math.Cos(B_f);
+
+      <span class="hljs-built_in">double</span> N = ell.a / Math.Sqrt(<span class="hljs-number">1.0</span> - ell.e2 * slat * slat);
+      <span class="hljs-built_in">double</span> t = Math.Tan(B_f);
+      <span class="hljs-built_in">double</span> t2 = t * t;
+      <span class="hljs-built_in">double</span> t4 = t2 * t2;
+
+      <span class="hljs-built_in">double</span> etaSq = ell.e2 / (<span class="hljs-number">1</span> - ell.e2) * clat * clat;
+
+      <span class="hljs-built_in">double</span> Y1 = (y - Y0) / N;
+      <span class="hljs-built_in">double</span> Y2 = Y1 * Y1;
+      <span class="hljs-built_in">double</span> Y3 = Y2 * Y1;
+      <span class="hljs-built_in">double</span> Y4 = Y3 * Y1;
+      <span class="hljs-built_in">double</span> Y5 = Y4 * Y1;
+      <span class="hljs-built_in">double</span> Y6 = Y5 * Y1;
+      <span class="hljs-built_in">double</span> V = <span class="hljs-number">1</span> + etaSq;
+
+      B = B_f - <span class="hljs-number">0.5</span> * t * V * Y2 + <span class="hljs-number">1</span> / <span class="hljs-number">24.0</span> * (<span class="hljs-number">5</span> + <span class="hljs-number">3</span> * t2 + etaSq -
+          <span class="hljs-number">9</span> * etaSq * t2) * V * t * Y4 - <span class="hljs-number">1</span> / <span class="hljs-number">720.0</span> * (<span class="hljs-number">61</span> + <span class="hljs-number">90</span> * t2 + <span class="hljs-number">45</span> * t4) * V * t * Y6;
+      L = <span class="hljs-number">1</span> / clat * (Y1 - <span class="hljs-number">1</span> / <span class="hljs-number">6.0</span> * (<span class="hljs-number">1</span> + <span class="hljs-number">2</span> * t2 + etaSq) * Y3 +
+          <span class="hljs-number">1</span> / <span class="hljs-number">120.0</span> * (<span class="hljs-number">5</span> + <span class="hljs-number">28</span> * t2 + <span class="hljs-number">24</span> * t4 + <span class="hljs-number">6</span> * etaSq + <span class="hljs-number">8</span> * etaSq * t2) * Y5);
+
+      L += L0;
+  }
+</code></pre>
+<hr>
+<h2 id="底点纬度的计算">底点纬度的计算</h2>
+<p><img src="file:///c:\Users\LENOVO\Desktop\大地测量\%E5%BA%95%E7%82%B9%E7%BA%AC%E5%BA%A6%E7%9A%84%E8%AE%A1%E7%AE%97.png" alt=""></p>
+<pre><code class="language-csharp">  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> 计算底点纬度</span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;x&quot;&gt;</span><span class="hljs-doctag">&lt;/param&gt;</span></span>
+  <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;returns&gt;</span><span class="hljs-doctag">&lt;/returns&gt;</span></span>
+  <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-built_in">double</span> <span class="hljs-title">EndPointLat</span>(<span class="hljs-params"><span class="hljs-built_in">double</span> x</span>)</span>
+  {
+
+      <span class="hljs-built_in">double</span> X = x;
+      <span class="hljs-built_in">double</span> a = ell.a;
+      <span class="hljs-built_in">double</span> e2 = ell.e2;
+
+      <span class="hljs-built_in">double</span> delta = <span class="hljs-number">0</span>;
+      <span class="hljs-built_in">double</span> Bf = <span class="hljs-number">0</span>;
+      <span class="hljs-built_in">double</span> B0 = X / a0;
+      <span class="hljs-keyword">do</span>
+      {
+          <span class="hljs-built_in">double</span> sin2B = Math.Sin(B0 * <span class="hljs-number">2</span>);
+          <span class="hljs-built_in">double</span> sin4B = Math.Sin(B0 * <span class="hljs-number">4</span>);
+          <span class="hljs-built_in">double</span> sin6B = Math.Sin(B0 * <span class="hljs-number">6</span>);
+          <span class="hljs-built_in">double</span> sin8B = Math.Sin(B0 * <span class="hljs-number">8</span>);
+          delta = -a2 / <span class="hljs-number">2</span> * sin2B + a4 / <span class="hljs-number">4</span> * sin4B - a6 / <span class="hljs-number">6</span> * sin6B + a8 / <span class="hljs-number">8</span> * sin8B;
+          Bf = (X - delta) / a0;
+          <span class="hljs-keyword">if</span> (Math.Abs(Bf - B0) &lt; <span class="hljs-number">1e-20</span>)
+              <span class="hljs-keyword">break</span>;
+
+          B0 = Bf;
+      } <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>);
+
+      <span class="hljs-keyword">return</span> Bf;
+  }
+</code></pre>
+<hr>
+<blockquote>
+<p>完整代码:<a href="https://github.com/rockli666/Guass">https://github.com/rockli666/Guass</a></p>
+</blockquote>
+<hr>
+<p>测绘地信遥感导航AI交流qq群:592418364</p>
+<p><strong>LSH from SWPU</strong></p>
+
+            
+            
+        </body>
+        </html>
